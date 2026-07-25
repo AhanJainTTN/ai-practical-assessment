@@ -10,6 +10,8 @@ Stretch/optional features are deliberately excluded from scope.
 
 A small internal application for managing support tickets. Internal users create, update, comment on, search, and progress tickets through a defined lifecycle. Users are seeded only — no user-management UI is required.
 
+Without authentication, the app uses an **Acting as** user selector so create, comment, and CSV export actions have a consistent "current user" context.
+
 ## Functional Requirements
 
 From the assessment brief (Core):
@@ -48,6 +50,17 @@ Allowed transitions:
 
 Invalid transitions must be rejected by the backend and handled clearly in the frontend.
 
+### Locked product behaviors (Core)
+
+- **Acting as user:** App-wide dropdown of seeded users (required for create, comment, and CSV export). Client-only persistence; no login.
+- **Priority:** `Low`, `Medium`, `High` — required on create; default `Medium` in the UI.
+- **Search/filter:** Exactly one capability — **filter by status** on the ticket list (`All` + each status value). No title search in Core.
+- **CSV export:** On the ticket list; exports tickets where `createdBy` equals the Acting-as user. See `ui-flow.md` for columns and empty-result behavior.
+- **Create defaults:** New tickets start as `Open`; `createdBy` = Acting-as user; `assignedTo` optional (nullable).
+- **Field updates:** Title, description, priority, and assignee editable in any status. Status changes only via the state machine. No ticket delete in Core.
+- **Comments:** Allowed on any existing ticket (including Closed/Cancelled).
+- **List behavior:** All tickets, no pagination; default sort `createdAt` descending.
+
 ## Non-Functional Requirements
 
 - Frontend application (any JS library) — stack TBD
@@ -65,20 +78,36 @@ Invalid transitions must be rejected by the backend and handled clearly in the f
 
 - Internal users only; no authentication required (Stretch auth is out of scope)
 - Users are pre-seeded; no user CRUD UI
-- "Self-generated tickets" for CSV export refers to tickets created by the current user context (TBD how user context is represented without auth)
+- **Acting as user** represents the current user context without auth. It is required before create, comment, or CSV export. Selection persists client-side (e.g. session/localStorage); exact mechanism is a stack-time choice.
+- **Self-generated tickets** for CSV export means tickets where `createdBy` matches the Acting-as user
+- **Priority** values are `Low`, `Medium`, `High` only; backend rejects other values
+- **Roles** (`requester`, `agent`) are seed/display metadata only — no permission checks, UI gating, or API authorization in Core
+- **Assignee** (`assignedTo`) is optional; tickets may be unassigned
+- **New tickets** always start with status `Open`; creator is the Acting-as user (not editable on the form)
+- **Required fields:** ticket create requires non-empty title, non-empty description, and priority; comment requires non-empty message
+- **Status filter** is the single search/filter capability; no title, priority, or assignee filter in Core
+- **No ticket delete** in Core
+- **Seed data** includes at least 3 users (mix of roles), tickets covering each status for demo, at least one ticket with comments, and at least 2 tickets created by one user for non-trivial CSV export
 
-## Clarifications (questions for a product owner)
+## Resolved clarifications
 
-- How is the "current user" determined for CSV export without authentication?
-- What are the allowed priority values?
-- What search/filter fields are required (title, status, priority, assignee)?
-- What user roles exist in seed data and do they affect behavior?
+| Question | Decision | Rationale |
+|----------|----------|-----------|
+| How is the "current user" determined for CSV export without authentication? | App-wide **Acting as** dropdown of seeded users; used for `createdBy` on create/comment and CSV filter | One concept covers create, comment, and export without Stretch auth |
+| What are the allowed priority values? | `Low`, `Medium`, `High` — required on create; default `Medium` in UI | Small familiar set; enough to demo validation |
+| What search/filter fields are required? | **Status filter only** on ticket list (`All` + each status) | Exactly one capability per brief; reinforces state machine |
+| What user roles exist in seed data and do they affect behavior? | `requester` and `agent` — **display/seed only**; no behavioral effect in Core | Brief requires `role` on User; RBAC is Stretch |
+
+No open Core product clarifications remain. Tech stack is TBD.
 
 ## Edge Cases
 
-- Attempting invalid status transitions (must be rejected)
-- Missing or empty required fields on create/update
-- Commenting on non-existent tickets
-- Assigning to non-existent users
-- Exporting when no tickets exist
+- Attempting invalid status transitions (must be rejected by backend; clear error in UI)
+- Missing or empty required fields on create/update (title, description, priority, comment message)
+- Invalid priority value (must be rejected)
+- Commenting on non-existent tickets (must be rejected)
+- Assigning to non-existent users (must be rejected)
+- Acting-as user not selected before create, comment, or export (UI blocks or prompts selection)
+- Exporting when Acting-as user has no tickets (CSV with headers only — success, not an error)
+- Comments allowed on Closed/Cancelled tickets
 - Data persistence across application restart
