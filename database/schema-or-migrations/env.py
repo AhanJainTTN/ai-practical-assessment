@@ -12,6 +12,9 @@ if str(BACKEND_ROOT) not in sys.path:
 
 from app.core.config import settings  # noqa: E402
 from app.core.database import Base  # noqa: E402
+from app.comments.models import Comment  # noqa: E402, F401
+from app.tickets.models import Ticket  # noqa: E402, F401
+from app.users.models import User  # noqa: E402, F401
 
 config = context.config
 

@@ -15,23 +15,35 @@ DATABASE_URL=sqlite:///./tickets.db
 | Path | Purpose |
 |------|---------|
 | `database/schema-or-migrations/` | Alembic config (`alembic.ini`, `env.py`, `versions/`) |
-| `database/seed-data/` | Seed script for users, tickets, comments (next milestone) |
-| `tickets.db` | SQLite database file (gitignored; created on migrate/seed in `src/backend/`) |
+| `database/seed-data/seed.py` | Wipe-and-reseed script for demo users, tickets, comments |
+| `tickets.db` | SQLite database file (gitignored; created in `src/backend/` on migrate/seed) |
 
-Alembic imports SQLAlchemy `Base` from `src/backend/app/core/database.py`. Models and the first migration revision are added in the Schema & seed milestone.
+Alembic imports SQLAlchemy models from `src/backend/app/*/models.py` via `Base.metadata`.
 
 ## Schema
 
-Three tables per [data-model.md](../data-model.md): `users`, `tickets`, `comments`. Foreign keys for `created_by`, `assigned_to`, `ticket_id`. Enum-like columns for `priority`, `status`, and `role`.
+Three tables per [data-model.md](../data-model.md):
+
+| Table | Key columns |
+|-------|-------------|
+| `users` | `id`, `name`, `email` (unique), `role` (`requester` \| `agent`) |
+| `tickets` | `id`, `title`, `description`, `priority`, `status`, `assigned_to` (nullable FK), `created_by` (FK), `created_at`, `updated_at` |
+| `comments` | `id`, `ticket_id` (FK), `message`, `created_by` (FK), `created_at` |
+
+Enum-like fields are stored as strings matching the API contract (`Open`, `In Progress`, `Low`, etc.).
+
+Initial migration: `database/schema-or-migrations/versions/c22ab7875b2d_create_users_tickets_comments.py`
 
 ## Seed expectations
 
-Minimum seed per requirements:
+Minimum seed per requirements (implemented in `seed.py`):
 
 - At least 3 users (mix of `requester` and `agent`)
 - At least one ticket per status (`Open`, `In Progress`, `Resolved`, `Closed`, `Cancelled`)
 - At least one ticket with comments
 - At least 2 tickets created by the same user (for non-trivial CSV export demo)
+
+Current demo seed: 3 users, 6 tickets (all five statuses covered; two `Open`), 2 comments on the first open ticket. Alice (requester) has 3 tickets for CSV export testing.
 
 ## Local setup
 
@@ -50,7 +62,7 @@ cp ../../.env.example .env
 
 `DATABASE_URL` is relative to the backend working directory (`src/backend/`).
 
-### 3. Run migrations (when available)
+### 3. Run migrations
 
 From `src/backend`:
 
@@ -58,17 +70,21 @@ From `src/backend`:
 uv run alembic -c ../../database/schema-or-migrations/alembic.ini upgrade head
 ```
 
-Scaffold state: Alembic is initialized; `versions/` is empty until the first migration is added.
-
 Check current revision:
 
 ```bash
 uv run alembic -c ../../database/schema-or-migrations/alembic.ini current
 ```
 
-### 4. Seed data (when available)
+### 4. Seed data
 
-Seed script path: `database/seed-data/` — commands documented in the Schema & seed milestone.
+From `src/backend`:
+
+```bash
+uv run python ../../database/seed-data/seed.py
+```
+
+Wipe-and-reseed: deletes all rows in FK-safe order (comments → tickets → users) then inserts demo data. Safe to re-run before demos.
 
 ### 5. Start the API
 

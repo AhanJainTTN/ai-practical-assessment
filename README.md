@@ -53,10 +53,26 @@ cp .env.example src/frontend/.env
 ```bash
 cd src/backend
 uv sync
+```
+
+### Database migrate and seed
+
+Run from `src/backend` (creates `tickets.db` in this directory):
+
+```bash
+uv run alembic -c ../../database/schema-or-migrations/alembic.ini upgrade head
+uv run python ../../database/seed-data/seed.py
+```
+
+The seed script wipes and reseeds demo users, tickets, and comments. Re-run anytime for a predictable demo dataset.
+
+### Start API
+
+```bash
 uv run uvicorn main:app --reload
 ```
 
-API base: `http://localhost:8000` — stub routes under `/api/*` (e.g. `GET /api/users` returns `[]`).
+API base: `http://localhost:8000` — stub routes under `/api/*` until the Backend API milestone.
 
 ## Frontend setup
 
@@ -70,14 +86,14 @@ App: `http://localhost:5173` — placeholder routes for list, create, and detail
 
 ## Database migrations
 
-Alembic lives in `database/schema-or-migrations/`. Run from `src/backend`:
+Alembic lives in `database/schema-or-migrations/`. Common commands from `src/backend`:
 
 ```bash
-cd src/backend
 uv run alembic -c ../../database/schema-or-migrations/alembic.ini current
+uv run alembic -c ../../database/schema-or-migrations/alembic.ini upgrade head
 ```
 
-Initial migration and seed script are added in the Schema & seed milestone.
+See [database/setup-notes.md](database/setup-notes.md) for full database workflow.
 
 ## Running tests
 
