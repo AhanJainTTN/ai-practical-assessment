@@ -4,7 +4,7 @@
 
 - **Acting as** user selector (dropdown of seeded users) — visible app-wide
 - Required before create ticket, add comment, or CSV export
-- Selection persists client-side between visits (exact mechanism TBD at stack lock)
+- Selection persists in browser `localStorage` between visits
 - If not selected, mutating actions and export are blocked or prompt selection
 
 ## Screens

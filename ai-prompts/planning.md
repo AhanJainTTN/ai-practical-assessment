@@ -208,3 +208,88 @@ placeholders, and archive the Cursor repo-init plan under tool-specific.
 **Note:** `ai_assessment_plan.pdf` is currently untracked. The init plan recommended leaving it out of the repo — don’t `git add` it unless you want the brief committed.
 
 I'm in Ask mode, so I can’t create the commit. Switch to Agent mode if you want me to run it (excluding the PDF).
+
+---
+
+**User**
+
+I have my requirements mostly locked down. I want to now decide a tech stack. What should I keep in mind while making this decision?
+
+---
+
+**Cursor**
+
+Guidance on stack selection criteria for the Core assessment scope: optimize for delivery speed and assessability, prefer familiarity, match complexity to scope (no auth/Docker/OpenAPI), enforce business rules on backend, keep FE↔BE contract simple, use boring RDBMS, ensure testing path is first-class, and document rationale.
+
+---
+
+**User**
+
+Considering the scope of this project, I'd like to keep things simple and factoring in familiarity, I would go with a Python BE, not Django as there is too much bloat for this project. I'm leaning towards FastAPI as a nice middleground between bloat and lean. And react for FE. Does vanilla react make sense for this or should I use typescript / some other variants?
+
+---
+
+**Cursor**
+
+Recommended Vite + React SPA (not Next.js/CRA). JS vs TS based on familiarity — both fine for Core; TS only if comfortable. Avoid Redux and heavy state libs. FastAPI + Vite/React is a solid Core fit.
+
+---
+
+**User**
+
+Would the type of UI I am looking for make a difference in FE choice? Thinking of a linear / shadcdn component inspired look
+
+---
+
+**Cursor**
+
+Look affects styling approach more than framework choice. Linear/shadcn aesthetic achievable with Vite + React; shadcn would push toward TS + Tailwind but not required. Chase aesthetic with lightweight CSS if not committed to shadcn.
+
+---
+
+**User**
+
+not committed to shadcdn or anything, just would want the look to feel that way
+
+---
+
+**Cursor**
+
+Confirmed: stack stays FastAPI + Vite/React; Linear-inspired look via lightweight CSS, no component library commitment.
+
+---
+
+**User**
+
+So fastapi, react/vite (js) it is
+
+---
+
+**Cursor**
+
+Locked FastAPI + Vite/React (JS). SQLite recommended for simplest local setup when ready.
+
+---
+
+**User**
+
+SQlite will be fine for this, does it mention anywhere in @ai_assessment_plan.pdf that I need to use any specific RDBMS?
+
+---
+
+**Cursor**
+
+No specific RDBMS required. Brief says "Use Any RDBMS." SQLite is valid; document setup, migrations, and seed in README.
+
+---
+
+**User**
+
+Now that I have finalised the tech stack / rationale, create / update the necessary artefacts
+
+---
+
+**Cursor**
+
+Plan created to lock stack across README, candidate-info, requirements-analysis, ui-flow, design-notes, database/setup-notes, implementation-plan, test-strategy, api-contract, and ai-prompts — documentation only, no app scaffolding yet.
+

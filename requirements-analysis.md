@@ -63,9 +63,9 @@ Invalid transitions must be rejected by the backend and handled clearly in the f
 
 ## Non-Functional Requirements
 
-- Frontend application (any JS library) — stack TBD
-- Backend API (any Python framework) — stack TBD
-- Database persistence (any RDBMS) — choice TBD
+- Frontend: Vite + React (JavaScript) SPA
+- Backend API: FastAPI (Python)
+- Database persistence: SQLite (any RDBMS allowed by brief)
 - Database setup or migration scripts
 - Seed or sample data
 - Input validation and error handling
@@ -78,7 +78,7 @@ Invalid transitions must be rejected by the backend and handled clearly in the f
 
 - Internal users only; no authentication required (Stretch auth is out of scope)
 - Users are pre-seeded; no user CRUD UI
-- **Acting as user** represents the current user context without auth. It is required before create, comment, or CSV export. Selection persists client-side (e.g. session/localStorage); exact mechanism is a stack-time choice.
+- **Acting as user** represents the current user context without auth. It is required before create, comment, or CSV export. Selection persists in browser `localStorage`.
 - **Self-generated tickets** for CSV export means tickets where `createdBy` matches the Acting-as user
 - **Priority** values are `Low`, `Medium`, `High` only; backend rejects other values
 - **Roles** (`requester`, `agent`) are seed/display metadata only — no permission checks, UI gating, or API authorization in Core
@@ -97,8 +97,10 @@ Invalid transitions must be rejected by the backend and handled clearly in the f
 | What are the allowed priority values? | `Low`, `Medium`, `High` — required on create; default `Medium` in UI | Small familiar set; enough to demo validation |
 | What search/filter fields are required? | **Status filter only** on ticket list (`All` + each status) | Exactly one capability per brief; reinforces state machine |
 | What user roles exist in seed data and do they affect behavior? | `requester` and `agent` — **display/seed only**; no behavioral effect in Core | Brief requires `role` on User; RBAC is Stretch |
+| What is the technology stack? | **FastAPI** backend, **Vite + React (JS)** frontend, **SQLite** database; SQLAlchemy + Alembic for schema/seed; pytest for state-machine tests | Familiar, lean stack sized for Core scope; no Django/Next/Docker/auth overhead |
+| How is Acting-as user persisted? | Browser **`localStorage`** | Client-only; survives refresh; no auth |
 
-No open Core product clarifications remain. Tech stack is TBD.
+No open Core product or stack clarifications remain. Tech stack is locked.
 
 ## Edge Cases
 
