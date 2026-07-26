@@ -10,13 +10,15 @@ Connection string example:
 DATABASE_URL=sqlite:///./tickets.db
 ```
 
-## Planned layout
+## Layout
 
 | Path | Purpose |
 |------|---------|
-| `database/schema-or-migrations/` | Alembic migration scripts (created when backend is scaffolded) |
-| `database/seed-data/` | Seed SQL or Python seed script for users, tickets, comments |
-| `tickets.db` | SQLite database file (gitignored; created on migrate/seed) |
+| `database/schema-or-migrations/` | Alembic config (`alembic.ini`, `env.py`, `versions/`) |
+| `database/seed-data/` | Seed script for users, tickets, comments (next milestone) |
+| `tickets.db` | SQLite database file (gitignored; created on migrate/seed in `src/backend/`) |
+
+Alembic imports SQLAlchemy `Base` from `src/backend/app/core/database.py`. Models and the first migration revision are added in the Schema & seed milestone.
 
 ## Schema
 
@@ -31,19 +33,54 @@ Minimum seed per requirements:
 - At least one ticket with comments
 - At least 2 tickets created by the same user (for non-trivial CSV export demo)
 
-## Local setup (commands TBD)
+## Local setup
 
-Concrete migrate and seed commands will be documented here and in [README.md](../README.md) when the FastAPI backend is scaffolded. Expected flow:
+### 1. Install backend dependencies
 
-1. Create virtualenv and install backend dependencies
-2. Run Alembic migrations to create schema
-3. Run seed script to populate demo data
-4. Start FastAPI — app reads `DATABASE_URL` from environment or `.env` (not committed)
+```bash
+cd src/backend
+uv sync
+```
+
+### 2. Configure environment
+
+```bash
+cp ../../.env.example .env
+```
+
+`DATABASE_URL` is relative to the backend working directory (`src/backend/`).
+
+### 3. Run migrations (when available)
+
+From `src/backend`:
+
+```bash
+uv run alembic -c ../../database/schema-or-migrations/alembic.ini upgrade head
+```
+
+Scaffold state: Alembic is initialized; `versions/` is empty until the first migration is added.
+
+Check current revision:
+
+```bash
+uv run alembic -c ../../database/schema-or-migrations/alembic.ini current
+```
+
+### 4. Seed data (when available)
+
+Seed script path: `database/seed-data/` — commands documented in the Schema & seed milestone.
+
+### 5. Start the API
+
+```bash
+uv run uvicorn main:app --reload
+```
 
 ## Environment variables
 
 | Variable | Example | Notes |
 |----------|---------|-------|
-| `DATABASE_URL` | `sqlite:///./tickets.db` | SQLite file path relative to backend working directory |
+| `DATABASE_URL` | `sqlite:///./tickets.db` | SQLite file path relative to `src/backend/` |
+| `CORS_ORIGINS` | `http://localhost:5173` | Comma-separated origins for Vite dev server |
 
 No secrets required for Core (no auth).

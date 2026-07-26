@@ -14,6 +14,7 @@ A small internal application for managing support tickets. Users create, update,
 | Frontend | Vite + React (JavaScript) | Familiar SPA for three screens; no Next.js/SSR overhead |
 | Database | SQLite | Brief allows any RDBMS; simplest local setup and persistence |
 | Data access | SQLAlchemy + Alembic | Schema migrations and seed scripts for FastAPI |
+| Python tooling | uv | Fast, reproducible dependency management (`uv.lock`) |
 | Tests | pytest + FastAPI TestClient | Mandatory state-machine integration tests against the API |
 | UI styling | Lightweight CSS (variables/classes) | Linear-inspired look without component-library overhead |
 
@@ -21,16 +22,70 @@ A small internal application for managing support tickets. Users create, update,
 
 Stretch remains out of scope (no Docker, auth, OpenAPI, user CRUD).
 
-## Setup
+## Prerequisites
 
-Setup commands will be added when `src/` is scaffolded. Planned layout:
+- [uv](https://docs.astral.sh/uv/) (Python package manager)
+- Node.js 18+ and npm (frontend)
 
-- **Backend:** `src/backend/` — FastAPI app, SQLAlchemy models, Alembic migrations
+## Project layout
+
+- **Backend:** `src/backend/` — FastAPI app (feature/hybrid layout: `api/`, `core/`, `users/`, `tickets/`, `comments/`)
 - **Frontend:** `src/frontend/` — Vite + React SPA
-- **Database:** `database/schema-or-migrations/`, `database/seed-data/` — see [database/setup-notes.md](database/setup-notes.md)
+- **Database:** `database/schema-or-migrations/` (Alembic), `database/seed-data/` — see [database/setup-notes.md](database/setup-notes.md)
 
-Environment variable example: `DATABASE_URL=sqlite:///./tickets.db`
+## Environment
 
-## Running Tests
+Copy the example env file and adjust if needed:
 
-Test commands will be added when the backend is scaffolded. Mandatory tier: pytest integration tests for ticket status transitions (valid succeed; invalid rejected). See [test-strategy.md](test-strategy.md).
+```bash
+cp .env.example src/backend/.env
+cp .env.example src/frontend/.env
+```
+
+| Variable | Example | Used by |
+|----------|---------|---------|
+| `DATABASE_URL` | `sqlite:///./tickets.db` | Backend (relative to `src/backend/` when running uvicorn) |
+| `CORS_ORIGINS` | `http://localhost:5173` | Backend |
+| `VITE_API_URL` | `http://localhost:8000` | Frontend |
+
+## Backend setup
+
+```bash
+cd src/backend
+uv sync
+uv run uvicorn main:app --reload
+```
+
+API base: `http://localhost:8000` — stub routes under `/api/*` (e.g. `GET /api/users` returns `[]`).
+
+## Frontend setup
+
+```bash
+cd src/frontend
+npm install
+npm run dev
+```
+
+App: `http://localhost:5173` — placeholder routes for list, create, and detail.
+
+## Database migrations
+
+Alembic lives in `database/schema-or-migrations/`. Run from `src/backend`:
+
+```bash
+cd src/backend
+uv run alembic -c ../../database/schema-or-migrations/alembic.ini current
+```
+
+Initial migration and seed script are added in the Schema & seed milestone.
+
+## Running tests
+
+From `src/backend` (after tests are added under `tests/`):
+
+```bash
+cd src/backend
+uv run pytest
+```
+
+Mandatory tier: pytest integration tests for ticket status transitions. See [test-strategy.md](test-strategy.md).
