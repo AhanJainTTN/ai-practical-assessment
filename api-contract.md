@@ -48,8 +48,8 @@ Base URL: `http://localhost:8000` (local dev). All JSON responses unless noted. 
     "status": "Open",
     "assignedTo": { "id": 2, "name": "...", "email": "..." },
     "createdBy": { "id": 1, "name": "...", "email": "..." },
-    "createdAt": "2026-01-01T00:00:00Z",
-    "updatedAt": "2026-01-01T00:00:00Z"
+    "createdAt": "2026-01-01T00:00:00",
+    "updatedAt": "2026-01-01T00:00:00"
   }
 ]
 ```
