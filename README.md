@@ -97,11 +97,11 @@ See [database/setup-notes.md](database/setup-notes.md) for full database workflo
 
 ## Running tests
 
-From `src/backend` (after tests are added under `tests/`):
+From `src/backend`:
 
 ```bash
 cd src/backend
 uv run pytest
 ```
 
-Mandatory tier: pytest integration tests for ticket status transitions. See [test-strategy.md](test-strategy.md).
+16 integration tests cover state-machine transitions, validation, and CSV export. See [test-strategy.md](test-strategy.md) and [test-results.md](test-results.md).
