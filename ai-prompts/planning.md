@@ -1,295 +1,109 @@
-# Repository initialization files
-_Exported on 25/07/2026 at 20:20:16 GMT+5:30 from Cursor (3.13.10)_
+# Planning Prompts
+
+## Entry 1 — Repo init scaffold (2026-07-25)
+
+### Prompt (text or summary)
+
+Refer to the assessment PDF. Assuming tech stack is TBD and support ticket management requirements are yet to be locked down, what files should I initialise the repository with? Follow-up: mark Stretch/optional work as out of scope; align scaffolds to PDF submission templates exactly.
+
+### AI response summary
+
+AI reviewed the PDF required repo layout and drafted an init plan: root lifecycle docs, `ai-prompts/` by activity, `tool-specific/cursor-workflow/`, empty `src/` / `tests/` / `database/` placeholders, Core brief pre-seeding in requirements/data-model/ui-flow docs, and `.gitignore`. After scope tightening, Stretch was marked permanently out of scope (no Docker, auth, OpenAPI, user CRUD UI). Implementation created 18 root docs, directories, and pre-seeded Core content from the brief.
+
+### Accepted
+
+- PDF-aligned submission template structure for named artifacts
+- Core-only scope with Stretch permanently excluded
+- `ai-prompts/` with seven activity files using the PDF entry template
+- Empty app/database placeholders until stack lock
+- Pre-seeded requirements, acceptance criteria, data model, ui-flow, implementation plan
+
+### Changed
+
+- Scope language tightened after my "optional part will be out of scope" follow-up — file list unchanged, Stretch wording made explicit
+
+### Rejected (and why)
+
+- Stretch/optional features — permanently out of scope per assessment focus on Core only
+- Stack-specific files (`package.json`, `requirements.txt`, Docker) — deferred until requirements and stack are locked
 
 ---
 
-**User**
+## Entry 2 — One final PR description (2026-07-25)
 
-Refer to the @/Users/ahan/Documents/Projects/ai-practical-assessment/ PDF. Assuming tech stack is TBD and support ticket management system requirements are yet to be locked down, what all files should I be initialising the repository with?
+### Prompt (text or summary)
 
----
+Should `pr-description.md` contain one final PR or every PR created? What if I commit now when done with scaffolding?
 
-**Cursor**
+### AI response summary
 
-> Auto routed to grok-4.5
+AI advised treating `pr-description.md` as a single submission artifact describing the final delivery PR, not a log of every commit or intermediate PR. Scaffolding commits are fine as normal workflow; leave `pr-description.md` empty until Core is complete.
 
+### Accepted
 
+- One `pr-description.md` written at the end for the main delivery PR
+- Many small commits for ownership (scaffold → requirements → API → UI → tests → docs)
 
-I'll review the PDF assessment brief first so the repo bootstrap list matches what's actually required.
+### Changed
 
-The PDF spells out a required repo layout. I'll draft an init plan that scaffolds those artifacts and folders while leaving stack-specific app code out until requirements and tech choices are locked.
+- N/A
 
----
+### Rejected (and why)
 
-**User**
-
-The optional part will be out of scope
-
----
-
-**Cursor**
-
-> Auto routed to grok-4.5
-
-
-
-I'll update the plan to mark Stretch work as explicitly out of scope.
-
-Updated. Stretch is now **permanently out of scope** — not deferred.
-
-That means the init and later Core work will not include Docker, auth, OpenAPI, user CRUD UI, or a richer data model. Seeded docs will state Core-only focus. The file list itself is unchanged; only scope language in the plan was tightened.
+- Per-PR or per-commit entries in `pr-description.md` — PDF template is singular and reviewers want one delivery narrative
 
 ---
 
-**User**
+## Entry 3 — Chat and phase sequencing (2026-07-25)
 
-Refer to submission templates for strucure
+### Prompt (text or summary)
 
----
+Should I use a new chat for locking down requirements and tech stack? Lock down stack first or requirements?
 
-**Cursor**
+### AI response summary
 
-> Auto routed to grok-4.5
+AI recommended a fresh chat for the next phase (cleaner lifecycle evidence for `ai-prompts/`). On ordering: requirements first, then stack — product clarifications (priority values, Acting-as without auth, filter scope) shape the API more than framework choice; the PDF already constrains JS + Python + RDBMS families.
 
+### Accepted
 
+- Separate chat sessions per lifecycle phase
+- Requirements lock before stack lock
+- Attach brief PDF and seeded docs when starting the requirements chat
 
-I'll align the plan's file scaffolds with the PDF submission templates exactly.
+### Changed
 
-Updated. Scaffolding now follows the PDF **Submission Templates** section-for-section (`candidate-info`, `requirements-analysis`, `acceptance-criteria`, `implementation-plan`, `design-notes`, `api-contract`, `test-strategy`, `debugging-notes`, `code-review-notes`, `reflection`, `pr-description`), plus the PDF prompt-entry shape under `ai-prompts/`.
+- N/A
 
-Files that appear in the required tree but have no named template (`README`, `tool-workflow`, `data-model`, `ui-flow`, etc.) get minimal matching headers only—no extra invented structure.
+### Rejected (and why)
 
----
-
-**User**
-
-Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
-
-To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+- Stack-first ordering — risks reverse-fitting product to framework and weaker requirement-analysis evidence
 
 ---
 
-**Cursor**
+## Entry 4 — Lock Core requirements (2026-07-26)
 
-> Auto routed to composer-2.5
+### Prompt (text or summary)
 
+Lock Core product/requirements decisions only — no tech stack. Read `@ai_assessment_plan.pdf`, `requirements-analysis.md`, `acceptance-criteria.md`, `data-model.md`, `ui-flow.md`. Resolve every clarification and assumption with concrete, demonstrable defaults.
 
+### AI response summary
 
-I'll scaffold the repo per the plan: starting with the root markdown files, then folders, Core brief seeding, and `.gitignore`.
+AI read the seeded docs and PDF brief, proposed simple product defaults, and updated all four requirements artifacts. Core product decisions locked; only tech stack and Acting-as persistence mechanism remained TBD.
 
+### Accepted
 
-Repository initialization is complete. All todos are done.
+- **Acting as** — seeded-user dropdown for create, comment, and CSV export (no auth)
+- **Priority** — `Low` / `Medium` / `High` (required; default Medium)
+- **Filter** — status only on ticket list (`All` + each status)
+- **Roles** — `requester` / `agent`, display-only (no RBAC)
+- **CSV** — from list; `createdBy` = Acting-as; defined columns; headers-only when empty
+- **Create** — always `Open`; assignee optional; no delete in Core
 
-**Created (18 root docs)** — PDF Submission Template headers where defined; minimal headers elsewhere:
-- Lifecycle: `candidate-info.md`, `tool-workflow.md`, `requirements-analysis.md`, `acceptance-criteria.md`, `implementation-plan.md`, `design-notes.md`, `api-contract.md`, `data-model.md`, `ui-flow.md`, `test-strategy.md`, `test-results.md`, `debugging-notes.md`, `code-review-notes.md`, `review-fixes.md`, `pr-description.md`, `reflection.md`, `final-ai-usage-summary.md`, `README.md`
+### Changed
 
-**Pre-seeded Core brief** in:
-- `requirements-analysis.md` — entities, features, state machine, scope note
-- `acceptance-criteria.md` — Core checklist from the PDF
-- `data-model.md` — User/Ticket/Comment + transitions
-- `ui-flow.md` — screens, lifecycle diagram, CSV export
-- `implementation-plan.md` — Stretch explicitly excluded
+- Expanded assumptions, clarifications table, edge cases, and checkable acceptance criteria across the four docs
 
-**Directories**
-- `ai-prompts/` — 7 activity files with prompt-entry template
-- `tool-specific/cursor-workflow/`
-- `src/`, `tests/`, `database/schema-or-migrations/`, `database/seed-data/`
-- `database/setup-notes.md` (stub)
+### Rejected (and why)
 
-**Hygiene**
-- `.gitignore` — env files, Python/Node artifacts, IDE/OS junk, secrets
-
-**Deferred (as planned)**
-- No `package.json`, `requirements.txt`, Docker, auth, or OpenAPI
-- Stack-specific setup left as TBD
-
-`ai_assessment_plan.pdf` was left local and not committed. Next step: lock the stack, then scaffold `src/` and `database/`.
-
----
-
-**User**
-
-do you think @pr-description.md should contain 1 final PR or every PR created? like what if I commit now when i am done with scaffolding?
-
----
-
-**Cursor**
-
-> Auto routed to grok-4.5
-
-
-
-**One final PR description** — not one entry per PR or commit.
-
-`pr-description.md` is a submission artifact: a single write-up of what you shipped for the assessment (features, DB, tests, AI usage, limitations). The PDF template is singular (“PR Description”), and reviewers care about that narrative more than a log of every branch.
-
-**If you commit scaffolding now:** that’s fine and matches the plan’s “chore: scaffold assessment repository structure.” Treat it as a normal commit (or a tiny chore PR if you use PRs for everything). **Don’t** fill `pr-description.md` for that — leave it empty until the Core app is done, then write it as the description for your **main delivery PR** (e.g. `feature/core-tickets` → `main`).
-
-**Practical pattern:**
-- Many small commits (scaffold → requirements lock → API → UI → tests → docs) — good for ownership and “point to the commit that fixed X”
-- Optional intermediate PRs for your own workflow
-- **One** `pr-description.md` that reads like the final PR into `main`
-
----
-
-**User**
-
-Add the @/Users/ahan/.cursor/plans/repo_init_scaffold_a94309dc.plan.md and my prompts to create it in the relevant folder
-
----
-
-**Cursor**
-
-> Auto routed to grok-4.5
-
-
-
-I'll check where planning artifacts live and what prompts from this chat belong in them, then draft a plan to add both.
-
-The plan belongs under Cursor workflow evidence; the prompts belong in `ai-prompts/planning.md`. Drafting that now.
-
----
-
-**User**
-
-Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
-
-To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
-
----
-
-**Cursor**
-
-> Auto routed to composer-2.5
-
-
-
-I'll archive the repo-init plan and your planning prompts per the attached plan.
-
-
-Done. All todos are complete.
-
-**Added**
-- [`tool-specific/cursor-workflow/repo-init-scaffold.plan.md`](tool-specific/cursor-workflow/repo-init-scaffold.plan.md) — archived plan body (frontmatter stripped), with source/date header
-
-**Updated**
-- [`ai-prompts/planning.md`](ai-prompts/planning.md) — Entries 1–3 for the three prompts that shaped the repo-init plan
-
-**Removed**
-- `tool-specific/cursor-workflow/.gitkeep`
-
-The Cursor-local plan at `~/.cursor/plans/` was not modified.
-
----
-
-**User**
-
-Create a commit message for all these changes
-
----
-
-**Cursor**
-
-> Auto routed to grok-4.5
-
-
-
-I'll check the current git state so the commit message matches what's actually staged to change.
-
-Suggested message:
-
-```
-chore: scaffold Core assessment repository structure
-
-Add PDF-required docs, prompt-history templates, empty app/database
-placeholders, and archive the Cursor repo-init plan under tool-specific.
-```
-
-**Note:** `ai_assessment_plan.pdf` is currently untracked. The init plan recommended leaving it out of the repo — don’t `git add` it unless you want the brief committed.
-
-I'm in Ask mode, so I can’t create the commit. Switch to Agent mode if you want me to run it (excluding the PDF).
-
----
-
-**User**
-
-I have my requirements mostly locked down. I want to now decide a tech stack. What should I keep in mind while making this decision?
-
----
-
-**Cursor**
-
-Guidance on stack selection criteria for the Core assessment scope: optimize for delivery speed and assessability, prefer familiarity, match complexity to scope (no auth/Docker/OpenAPI), enforce business rules on backend, keep FE↔BE contract simple, use boring RDBMS, ensure testing path is first-class, and document rationale.
-
----
-
-**User**
-
-Considering the scope of this project, I'd like to keep things simple and factoring in familiarity, I would go with a Python BE, not Django as there is too much bloat for this project. I'm leaning towards FastAPI as a nice middleground between bloat and lean. And react for FE. Does vanilla react make sense for this or should I use typescript / some other variants?
-
----
-
-**Cursor**
-
-Recommended Vite + React SPA (not Next.js/CRA). JS vs TS based on familiarity — both fine for Core; TS only if comfortable. Avoid Redux and heavy state libs. FastAPI + Vite/React is a solid Core fit.
-
----
-
-**User**
-
-Would the type of UI I am looking for make a difference in FE choice? Thinking of a linear / shadcdn component inspired look
-
----
-
-**Cursor**
-
-Look affects styling approach more than framework choice. Linear/shadcn aesthetic achievable with Vite + React; shadcn would push toward TS + Tailwind but not required. Chase aesthetic with lightweight CSS if not committed to shadcn.
-
----
-
-**User**
-
-not committed to shadcdn or anything, just would want the look to feel that way
-
----
-
-**Cursor**
-
-Confirmed: stack stays FastAPI + Vite/React; Linear-inspired look via lightweight CSS, no component library commitment.
-
----
-
-**User**
-
-So fastapi, react/vite (js) it is
-
----
-
-**Cursor**
-
-Locked FastAPI + Vite/React (JS). SQLite recommended for simplest local setup when ready.
-
----
-
-**User**
-
-SQlite will be fine for this, does it mention anywhere in @ai_assessment_plan.pdf that I need to use any specific RDBMS?
-
----
-
-**Cursor**
-
-No specific RDBMS required. Brief says "Use Any RDBMS." SQLite is valid; document setup, migrations, and seed in README.
-
----
-
-**User**
-
-Now that I have finalised the tech stack / rationale, create / update the necessary artefacts
-
----
-
-**Cursor**
-
-Plan created to lock stack across README, candidate-info, requirements-analysis, ui-flow, design-notes, database/setup-notes, implementation-plan, test-strategy, api-contract, and ai-prompts — documentation only, no app scaffolding yet.
-
+- Tech stack choices in this session — explicitly deferred to a separate stack-lock chat
+- RBAC or role-based transition guards — kept roles display-only to keep Core small
