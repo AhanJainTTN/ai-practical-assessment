@@ -25,9 +25,9 @@ def seed() -> None:
         db.commit()
 
         users = [
-            User(name="Alice Requester", email="alice@example.com", role="requester"),
-            User(name="Bob Requester", email="bob@example.com", role="requester"),
-            User(name="Carol Agent", email="carol@example.com", role="agent"),
+            User(name="Alice Landwonder", email="alice@example.com", role="requester"),
+            User(name="Bob Builder", email="bob@example.com", role="requester"),
+            User(name="Carol Christmas", email="carol@example.com", role="agent"),
         ]
         db.add_all(users)
         db.flush()

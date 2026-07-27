@@ -26,7 +26,7 @@ Local dev: frontend and backend run as separate processes (Vite dev server + uvi
 - **State:** React context for Acting-as user (read/write `localStorage`); local component state for forms and API responses
 - **API client:** `fetch` to FastAPI base URL (env-configured, e.g. `VITE_API_URL`)
 - **Screens:** per [ui-flow.md](ui-flow.md) — list with status filter and CSV export; create form; detail with field edit, status transitions, comments
-- **Styling:** CSS variables for neutral palette, compact list rows, subtle borders — Linear-inspired without a component library
+- **Styling:** CSS variables on Linear dark canvas tokens (`#010102` canvas, surface ladder, lavender `#5e6ad2` accent); compact list rows, hairline borders — no component library
 - **Acting-as:** dropdown in app chrome; blocks create, comment, and export when unset; persists in `localStorage`
 
 ## Backend Design

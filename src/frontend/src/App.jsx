@@ -24,6 +24,7 @@ function AppHeader() {
   return (
     <header className="app-header">
       <Link to="/" className="app-brand">
+        <span className="app-brand-mark" aria-hidden="true" />
         Support Tickets
       </Link>
       <div className="header-actions">
