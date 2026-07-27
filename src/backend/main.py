@@ -2,7 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import api_router
+from app.comments.models import Comment  # noqa: F401 — register SQLAlchemy mapper
 from app.core.config import settings
+from app.tickets.models import Ticket  # noqa: F401 — register SQLAlchemy mapper
+from app.users.models import User  # noqa: F401 — register SQLAlchemy mapper
 
 
 def create_app() -> FastAPI:
