@@ -82,7 +82,7 @@ npm install
 npm run dev
 ```
 
-App: `http://localhost:5173` — placeholder routes for list, create, and detail.
+App: `http://localhost:5173` — ticket list, create form, and detail screens.
 
 ## Database migrations
 

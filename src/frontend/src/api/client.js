@@ -1,3 +1,5 @@
+import { formatApiError } from "../utils/errors.js";
+
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 async function request(path, options = {}) {
@@ -11,7 +13,9 @@ async function request(path, options = {}) {
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.detail ?? `Request failed with status ${response.status}`);
+    throw new Error(
+      formatApiError(errorBody.detail, `Request failed with status ${response.status}`),
+    );
   }
 
   if (response.status === 204) {
@@ -24,6 +28,19 @@ async function request(path, options = {}) {
   }
 
   return response.text();
+}
+
+async function requestBlob(path) {
+  const response = await fetch(`${API_BASE_URL}${path}`);
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({}));
+    throw new Error(
+      formatApiError(errorBody.detail, `Request failed with status ${response.status}`),
+    );
+  }
+
+  return response.blob();
 }
 
 export const apiClient = {
@@ -48,5 +65,14 @@ export const apiClient = {
       body: JSON.stringify(payload),
     }),
   exportTicketsCsv: (createdBy) =>
-    request(`/api/tickets/export.csv?createdBy=${createdBy}`),
+    requestBlob(`/api/tickets/export.csv?createdBy=${createdBy}`),
 };
+
+export function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
