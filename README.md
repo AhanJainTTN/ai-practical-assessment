@@ -72,7 +72,7 @@ The seed script wipes and reseeds demo users, tickets, and comments. Re-run anyt
 uv run uvicorn main:app --reload
 ```
 
-API base: `http://localhost:8000` — stub routes under `/api/*` until the Backend API milestone.
+API base: `http://localhost:8000` — routes under `/api/*` (see [api-contract.md](api-contract.md)).
 
 ## Frontend setup
 
