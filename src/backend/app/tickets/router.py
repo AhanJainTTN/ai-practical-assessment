@@ -2,6 +2,13 @@ from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.tickets.schemas import (
+    TicketCreate,
+    TicketDetailOut,
+    TicketOut,
+    TicketTransition,
+    TicketUpdate,
+)
 from app.tickets.service import TicketService
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -20,42 +27,37 @@ def export_tickets(
     )
 
 
-@router.get("")
+@router.get("", response_model=list[TicketOut])
 def list_tickets(
     status: str | None = None,
     db: Session = Depends(get_db),
-) -> list:
+) -> list[TicketOut]:
     return TicketService(db).list_tickets(status=status)
 
 
-@router.post("", status_code=201)
-def create_ticket(payload: dict, db: Session = Depends(get_db)) -> dict:
-    TicketService(db).create_ticket(payload)
-    return {}
+@router.post("", response_model=TicketOut, status_code=201)
+def create_ticket(payload: TicketCreate, db: Session = Depends(get_db)) -> TicketOut:
+    return TicketService(db).create_ticket(payload)
 
 
-@router.get("/{ticket_id}")
-def get_ticket(ticket_id: int, db: Session = Depends(get_db)) -> dict:
-    TicketService(db).get_ticket(ticket_id)
-    return {}
+@router.get("/{ticket_id}", response_model=TicketDetailOut)
+def get_ticket(ticket_id: int, db: Session = Depends(get_db)) -> TicketDetailOut:
+    return TicketService(db).get_ticket(ticket_id)
 
 
-@router.patch("/{ticket_id}")
+@router.patch("/{ticket_id}", response_model=TicketOut)
 def update_ticket(
     ticket_id: int,
-    payload: dict,
+    payload: TicketUpdate,
     db: Session = Depends(get_db),
-) -> dict:
-    TicketService(db).update_ticket(ticket_id, payload)
-    return {}
+) -> TicketOut:
+    return TicketService(db).update_ticket(ticket_id, payload)
 
 
-@router.post("/{ticket_id}/transitions")
+@router.post("/{ticket_id}/transitions", response_model=TicketOut)
 def transition_ticket(
     ticket_id: int,
-    payload: dict,
+    payload: TicketTransition,
     db: Session = Depends(get_db),
-) -> dict:
-    status = payload.get("status", "")
-    TicketService(db).transition_ticket(ticket_id, status)
-    return {}
+) -> TicketOut:
+    return TicketService(db).transition_ticket(ticket_id, payload.status)
