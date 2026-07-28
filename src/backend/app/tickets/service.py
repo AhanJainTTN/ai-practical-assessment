@@ -4,7 +4,7 @@ import io
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from app.core.time import utcnow
+from app.core.time import ensure_utc, utcnow
 from app.tickets.models import Ticket
 from app.tickets.repository import TicketRepository
 from app.tickets.schemas import (
@@ -183,8 +183,8 @@ class TicketService:
                     ticket.assignee.email if ticket.assignee else "",
                     ticket.creator.name,
                     ticket.creator.email,
-                    ticket.created_at.isoformat(),
-                    ticket.updated_at.isoformat(),
+                    ensure_utc(ticket.created_at).isoformat(),
+                    ensure_utc(ticket.updated_at).isoformat(),
                     len(comments),
                     " | ".join(comment.message for comment in comments),
                 ]

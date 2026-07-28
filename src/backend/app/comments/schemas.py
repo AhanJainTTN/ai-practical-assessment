@@ -1,8 +1,6 @@
-from datetime import datetime
-
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.core.types import NonEmptyStr
+from app.core.types import NonEmptyStr, UtcDateTime
 from app.users.schemas import UserRef
 
 
@@ -19,4 +17,4 @@ class CommentOut(BaseModel):
     id: int
     message: str
     created_by: UserRef = Field(serialization_alias="createdBy")
-    created_at: datetime = Field(serialization_alias="createdAt")
+    created_at: UtcDateTime = Field(serialization_alias="createdAt")

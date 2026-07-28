@@ -1,10 +1,9 @@
-from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.comments.schemas import CommentOut
-from app.core.types import NonEmptyStr
+from app.core.types import NonEmptyStr, UtcDateTime
 from app.users.schemas import UserRef
 
 Priority = Literal["Low", "Medium", "High"]
@@ -42,8 +41,8 @@ class TicketOut(BaseModel):
     status: TicketStatus
     assigned_to: UserRef | None = Field(serialization_alias="assignedTo")
     created_by: UserRef = Field(serialization_alias="createdBy")
-    created_at: datetime = Field(serialization_alias="createdAt")
-    updated_at: datetime = Field(serialization_alias="updatedAt")
+    created_at: UtcDateTime = Field(serialization_alias="createdAt")
+    updated_at: UtcDateTime = Field(serialization_alias="updatedAt")
 
     model_config = ConfigDict(populate_by_name=True)
 
