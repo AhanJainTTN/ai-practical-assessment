@@ -35,7 +35,7 @@ Covers all mandatory state-machine transitions (valid + invalid), plus validatio
 
 ## AI Usage Summary
 
-Cursor used for scaffolding, API/frontend implementation, test drafting, and documentation. Prompt history in `ai-prompts/`.
+Cursor used across the lifecycle (Plan → Agent): repo scaffold, requirements/stack lock, milestone implementation, pytest suite, and pre-submission code review. Prompt history with accepted/changed/rejected judgments is in `ai-prompts/`. Post-review fix: shared `UtcDateTime` for correct UTC display in UI and CSV. See `tool-workflow.md`, `reflection.md`, and `final-ai-usage-summary.md`.
 
 ## Screenshots / Demo Notes
 
